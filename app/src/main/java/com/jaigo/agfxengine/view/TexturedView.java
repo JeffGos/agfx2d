@@ -46,6 +46,7 @@ public class TexturedView extends View implements TextureBitmapProvider
 	public void draw()
 	{
 		int programHandle = shader.getProgramHandle();
+		shader.activate();
 
 		AGEngine.TextureManager().bindTextureForDrawing(textureInfo);
 		GLES20.glUniform2fv(GLES20.glGetUniformLocation(programHandle, "tCoordScale"), 1, textureInfo.getGlTextureScale(), 0);

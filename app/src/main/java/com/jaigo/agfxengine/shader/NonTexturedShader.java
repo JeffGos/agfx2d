@@ -12,12 +12,12 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-public class SimpleShader extends BaseShader
+public class NonTexturedShader extends BaseShader
 {
 	private int vertexBufferId;
 	private int drawOrderBufferId;
 
-	public SimpleShader(ShaderInfo shaderInfo)
+	public NonTexturedShader(ShaderInfo shaderInfo)
 	{
 		super(shaderInfo);
 	}
@@ -59,13 +59,13 @@ public class SimpleShader extends BaseShader
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, drawOrderBufferId);
 		GLES20.glBufferData(GLES20.GL_ELEMENT_ARRAY_BUFFER, drawOrder.length * 2, drawOrderBuffer, GLES20.GL_STATIC_DRAW);
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
-		CommonUtils.checkGLError("TexturedShader.initShaderVariables - error binding buffers");
+		CommonUtils.checkGLError("NonTexturedShader.initShaderVariables - error binding buffers");
 
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertexBufferId);
 		int vHandle = GLES20.glGetAttribLocation(programHandle, "vPosition");
 		GLES20.glEnableVertexAttribArray(vHandle);
 		GLES20.glVertexAttribPointer(vHandle, 3, GLES20.GL_FLOAT, false, 4 * 3, 0);
-		CommonUtils.checkGLError("TexturedShader.initShaderVariables - error in glVertexAttribPointer for vPosition");
+		CommonUtils.checkGLError("NonTexturedShader.initShaderVariables - error in glVertexAttribPointer for vPosition");
 
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, drawOrderBufferId);
 	}

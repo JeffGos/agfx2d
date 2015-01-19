@@ -48,6 +48,7 @@ public class View extends BaseView
 	public void draw()
 	{
 		int programHandle = shader.getProgramHandle();
+		shader.activate();
 
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "scale"), 1, glScale, 0);
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "preRotationTranslation"), 1, glPreRotationTranslation, 0);

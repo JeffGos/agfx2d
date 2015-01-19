@@ -19,7 +19,7 @@ public class ShaderManager
 	private BaseShader texturedShader;
 
 	public ShaderManager() {
-		nonTexturedShader = new TexturedShader(new ShaderInfo(R.raw.simple_vs, R.raw.simple_fs));
+		nonTexturedShader = new NonTexturedShader(new ShaderInfo(R.raw.nontextured_vs, R.raw.nontextured_fs));
 		texturedShader = new TexturedShader(new ShaderInfo(R.raw.textured_vs, R.raw.textured_fs));
 	}
 
@@ -72,7 +72,6 @@ public class ShaderManager
 	{
 		return shaders.get(index);
 	}
-
 
 	public void setViewProjectionMatrix(float[] vpMatrix)
 	{
