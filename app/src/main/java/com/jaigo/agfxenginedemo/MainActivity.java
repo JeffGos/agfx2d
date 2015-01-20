@@ -60,26 +60,23 @@ public class MainActivity extends Activity implements AGEngineEventListener
 	{
 		scene = new BaseView(1.0f, 1.0f);
 
-		/*
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opengleslogo);
 		final Image image = new Image(600, 210, bitmap);
+		image.setCenterPercent(0, 0.4f);
 		scene.addChild(image);
 
-		final Image image2 = new Image(600, 210, bitmap);
-		image2.setCenterPercent(0, 0.4f);
-		scene.addChild(image2);
-*/
-		//View square = new View(0.5f, 0.5f);
-		//square.setCenterPercent(0, -0.3f);
-		//scene.addChild(square);
-
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opengleslogo);
-		final Image image = new Image(600, 210, bitmap);
-		scene.addChild(image);
+		View square = new View(0.6f, 0.6f);
+		square.setCenterPercent(0, 0);
+		square.setColor(new float [] {0,0,1,1});
+		scene.addChild(square);
 
 		final Image image2 = new Image(600, 210, bitmap);
-		image2.setCenterPercent(0, 0.4f);
 		scene.addChild(image2);
+
+		View square2 = new View(0.1f, 0.1f);
+		square2.setCenterPercent(0, -0.2f);
+		square2.setColor(new float [] {0,1,0,1});
+		scene.addChild(square2);
 
 		AGEngine.ViewManager().addView(scene);
 
@@ -92,8 +89,8 @@ public class MainActivity extends Activity implements AGEngineEventListener
 			@Override
 			public void animate()
 			{
-				//image.scaleByPercent(scaleIncrement, scaleIncrement);
-				//image.rotateZByAngle(rotateIncrement);
+				image.scaleByPercent(scaleIncrement, scaleIncrement);
+				image.rotateZByAngle(rotateIncrement);
 				timer++;
 
 				if (timer >= 200) {

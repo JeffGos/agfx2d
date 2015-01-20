@@ -56,7 +56,9 @@ public class View extends BaseView
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "translation"), 1, glTranslation, 0);
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "color"), 1, glColor, 0);
 
+		shader.enable();
 		GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, getNumberOfVertices(), GLES20.GL_UNSIGNED_SHORT, 0);
+		shader.disable();
 
 		super.draw();
 	}
@@ -136,8 +138,8 @@ public class View extends BaseView
 			return;
 		}
 
-		glTranslation[0] = getCenterXPercent();//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(getCenterXPercent());
-		glTranslation[1] = getCenterYPercent();//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueY(getCenterYPercent());
+		glTranslation[0] = getCenterXPercent() * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(getCenterXPercent());
+		glTranslation[1] = getCenterYPercent() * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueY(getCenterYPercent());
 		glTranslation[2] = 0.0f;
 		glTranslation[3] = 0.0f;
 
@@ -146,8 +148,8 @@ public class View extends BaseView
 			float parentCenterXPercent = getParent().getAbsoluteCenterPercentVector()[0];
 			float parentCenterYPercent = getParent().getAbsoluteCenterPercentVector()[1];
 
-			glTranslation[0] += parentCenterXPercent;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(parentCenterXPercent);;
-			glTranslation[1] += parentCenterYPercent;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(parentCenterYPercent);;
+			glTranslation[0] += parentCenterXPercent * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(parentCenterXPercent);;
+			glTranslation[1] += parentCenterYPercent * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(parentCenterYPercent);;
 		}
 
 		for (BaseView child : getChildren()) {

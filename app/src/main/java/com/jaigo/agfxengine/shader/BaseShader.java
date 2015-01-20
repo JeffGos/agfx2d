@@ -45,8 +45,7 @@ public class BaseShader
 		GLES20.glAttachShader(programHandle, vertexShaderHandle);
 		GLES20.glAttachShader(programHandle, fragmentShaderHandle);
 		GLES20.glLinkProgram(programHandle);
-
-		Log.d(LogTags.OPEN_GL, "Program info log is " + GLES20.glGetProgramInfoLog(programHandle));
+		CommonUtils.checkGLError("BaseShader.initialise - error attaching shaders and linking shader program ");
 
 		activate();
 
@@ -55,6 +54,8 @@ public class BaseShader
 		initialised = true;
 
 		pushVPMatrix();
+
+		Log.d(LogTags.OPEN_GL, "BaseShader.initialise() - programHandle = " + programHandle + " - vertexShaderHandle = " + vertexShaderHandle + " - fragmentShaderHandle = " + fragmentShaderHandle);
 
 		return programHandle;
 	}
@@ -66,15 +67,29 @@ public class BaseShader
 		initialised = false;
 	}
 
+	protected void initShaderVariables() {
+
+	}
+
 	public void activate()
 	{
 		GLES20.glUseProgram(programHandle);
 		CommonUtils.checkGLError("BaseShader.activate - error using programHandle " + programHandle);
 	}
 
+	public void enable()
+	{
+
+	}
+
+	public void disable()
+	{
+
+	}
+
 	public void setViewProjectionMatrix(float[] vpMatrix) {
 
-		this.vpMatrix = vpMatrix;
+		this.vpMatrix = vpMatrix;//.clone();
 
 		pushVPMatrix();
 	}
@@ -92,10 +107,6 @@ public class BaseShader
 		CommonUtils.checkGLError("BaseShader.pushVPMatrix - error fetching vpMatrix from shader");
 		GLES20.glUniformMatrix4fv(vpMatrixLocation, 1, false, vpMatrix, 0);
 		CommonUtils.checkGLError("BaseShader.pushVPMatrix - error pushing vpMatrix to shader");
-	}
-
-	protected void initShaderVariables() {
-
 	}
 
 	public static int loadShader(int type, String shaderCode)
