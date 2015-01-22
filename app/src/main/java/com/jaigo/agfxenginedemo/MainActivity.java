@@ -13,7 +13,9 @@ import com.jaigo.agfxengine.AGEngine;
 import com.jaigo.agfxengine.AGEngineEventListener;
 import com.jaigo.agfxengine.AGSurfaceView;
 import com.jaigo.agfxengine.animation.Animation;
+import com.jaigo.agfxengine.common.Color;
 import com.jaigo.agfxengine.view.BaseView;
+import com.jaigo.agfxengine.view.Button;
 import com.jaigo.agfxengine.view.Image;
 import com.jaigo.agfxengine.view.View;
 
@@ -67,16 +69,17 @@ public class MainActivity extends Activity implements AGEngineEventListener
 
 		View square = new View(0.6f, 0.6f);
 		square.setCenterPercent(0, 0);
-		square.setColor(new float [] {0,0,1,1});
+		square.setColor(new Color(Color.BLUE));
 		scene.addChild(square);
 
 		final Image image2 = new Image(600, 210, bitmap);
 		scene.addChild(image2);
 
-		View square2 = new View(0.1f, 0.1f);
-		square2.setCenterPercent(0, -0.2f);
-		square2.setColor(new float [] {0,1,0,1});
-		scene.addChild(square2);
+		Button button = new Button(0.4f, 0.1f);
+		button.setCenterPercent(0, -0.2f);
+		button.setColor(new Color(Color.RED));
+		button.setTouchColor(new Color(Color.GREEN));
+		scene.addChild(button);
 
 		AGEngine.ViewManager().addView(scene);
 

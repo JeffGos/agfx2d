@@ -55,8 +55,6 @@ public class BaseShader
 
 		pushVPMatrix();
 
-		Log.d(LogTags.OPEN_GL, "BaseShader.initialise() - programHandle = " + programHandle + " - vertexShaderHandle = " + vertexShaderHandle + " - fragmentShaderHandle = " + fragmentShaderHandle);
-
 		return programHandle;
 	}
 

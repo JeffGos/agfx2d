@@ -38,6 +38,9 @@ public class BaseView
 	protected volatile float lastTouchedXPercent = 0.0f;
 	protected volatile float lastTouchedYPercent = 0.0f;
 
+	protected boolean isDragged = false;
+	protected boolean isTouched = false;
+
 	protected OnClickListener onClickListener;
 	protected OnDragListener onDragListener;
 	protected OnTouchListener onTouchListener;
@@ -166,27 +169,29 @@ public class BaseView
 		startTouchXPercent = lastTouchedXPercent = touchX;
 		startTouchYPercent = lastTouchedYPercent = touchY;
 
+		isTouched = true;
+
 		if (onTouchListener != null)
 		{
-			onTouchListener.onTouch(this);
+			onTouchListener.onTouched(this);
 		}
 
-		performTouchedAction(touchX, touchY);
+		onTouched();
 	}
 
-	public void performTouchedAction(float touchX, float touchY)
-	{
-
-	}
-
-	boolean dragged = false;
+	protected void onTouched() {}
 
 	public final void onDragged(float touchX, float touchY)
 	{
+		if (!isTouched)
+		{
+			return;
+		}
+
 		float dragAmountX = touchX - lastTouchedXPercent;
 		float dragAmountY = touchY - lastTouchedYPercent;
 
-		if (!dragged)
+		if (!isDragged)
 		{
 			float dragAmountXSinceStart = touchX - startTouchXPercent;
 			float dragAmountYSinceStart = touchX - startTouchYPercent;
@@ -194,7 +199,7 @@ public class BaseView
 
 			if (Math.abs(dragAmountXSinceStart) > DRAG_AMOUNT_THRESHOLD || Math.abs(dragAmountYSinceStart) > DRAG_AMOUNT_THRESHOLD)
 			{
-				dragged = true;
+				isDragged = true;
 			}
 		}
 
@@ -205,15 +210,26 @@ public class BaseView
 		{
 			onDragListener.onDrag(this, dragAmountX, dragAmountY);
 		}
+
+		onDragged();
 	}
+
+	protected void onDragged() {}
 
 	public final void onReleased(float touchX, float touchY)
 	{
+		isTouched = false;
+		isDragged = false;
+
 		if (onReleaseListener != null)
 		{
 			onReleaseListener.onRelease(this);
 		}
+
+		onReleased();
 	}
+
+	public void onReleased() {}
 
 	public final void onClicked(float touchX, float touchY)
 	{

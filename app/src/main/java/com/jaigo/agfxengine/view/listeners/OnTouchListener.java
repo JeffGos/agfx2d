@@ -7,5 +7,5 @@ import com.jaigo.agfxengine.view.BaseView;
 
 public interface OnTouchListener
 {
-	public void onTouch(BaseView view);
+	public void onTouched(BaseView view);
 }

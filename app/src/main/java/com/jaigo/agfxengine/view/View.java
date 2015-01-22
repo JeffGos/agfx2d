@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 
 import com.jaigo.agfxengine.AGEngine;
+import com.jaigo.agfxengine.common.Color;
 import com.jaigo.agfxengine.shader.BaseShader;
 
 public class View extends BaseView
@@ -15,11 +16,12 @@ public class View extends BaseView
 	private final float[] glPreRotationTranslation = new float [] { 0, 0, 0, 0};
 	private final float[] glRotationMatrix = new float [16];
 	private final float[] glTranslation = new float [] { 0, 0, 0, 0};
-	private final float[] glColor = new float [] {1.0f, 0.0f, 1.0f, 1.0f};
 
 	private int numberOfVertices = 4;
 
 	protected BaseShader shader;
+
+	protected Color color = new Color(new float [] {1.0f, 0.0f, 1.0f, 1.0f});
 
 	public View(int widthPixels, int heightPixels)
 	{
@@ -54,7 +56,7 @@ public class View extends BaseView
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "preRotationTranslation"), 1, glPreRotationTranslation, 0);
 		GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(programHandle, "rotation"), 1, false, glRotationMatrix, 0);
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "translation"), 1, glTranslation, 0);
-		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "color"), 1, glColor, 0);
+		GLES20.glUniform4fv(GLES20.glGetUniformLocation(programHandle, "color"), 1, getColor().getArray(), 0);
 
 		shader.enable();
 		GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, getNumberOfVertices(), GLES20.GL_UNSIGNED_SHORT, 0);
@@ -63,37 +65,14 @@ public class View extends BaseView
 		super.draw();
 	}
 
-	public float[] getColor()
+	public Color getColor()
 	{
-		return glColor;
+		return color;
 	}
 
-	public View setColor(float[] newColor)
+	public View setColor(Color color)
 	{
-		System.arraycopy(newColor, 0, glColor, 0, 4);
-		return this;
-	}
-
-	public View setColor(int index, float colorValue)
-	{
-		if (index < 0 || index > 3)
-		{
-			return this;
-		}
-
-		glColor[index] = colorValue;
-
-		return this;
-	}
-
-	public float getAlpha()
-	{
-		return glColor[3];
-	}
-
-	public View setAlpha(float alph)
-	{
-		glColor[3] = alph;
+		this.color = color;
 		return this;
 	}
 

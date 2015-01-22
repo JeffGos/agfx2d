@@ -1,13 +1,11 @@
 package com.jaigo.agfxengine.shader;
-// SimpleShader
+// NonTexturedShader
 //
 // Created by Jeff on 11/01/2015
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 import com.jaigo.agfxengine.common.CommonUtils;
-import com.jaigo.agfxengine.common.LogTags;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
