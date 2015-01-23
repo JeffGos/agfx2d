@@ -14,11 +14,6 @@ public class TexturedView extends View implements TextureBitmapProvider
 {
 	protected TextureInfo textureInfo = new TextureInfo();
 
-	public TexturedView(int widthPixels, int heightPixels)
-	{
-		super(widthPixels, heightPixels);
-	}
-
 	public TexturedView(float widthPercent, float heightPercent)
 	{
 		super(widthPercent, heightPercent);
@@ -34,7 +29,19 @@ public class TexturedView extends View implements TextureBitmapProvider
 
 	public void initTexture()
 	{
-		textureInfo = AGEngine.TextureManager().addTexture(getWidthPx(), getHeightPx(), this);
+		textureInfo = AGEngine.TextureManager().addTexture(this);
+	}
+
+	@Override
+	public int getTextureWidth()
+	{
+		return 0;
+	}
+
+	@Override
+	public int getTextureHeight()
+	{
+		return 0;
 	}
 
 	public Bitmap getTextureBitmap()

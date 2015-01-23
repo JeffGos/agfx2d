@@ -7,5 +7,7 @@ import android.graphics.Bitmap;
 
 public interface TextureBitmapProvider
 {
+	public int getTextureWidth();
+	public int getTextureHeight();
 	public Bitmap getTextureBitmap();
 }

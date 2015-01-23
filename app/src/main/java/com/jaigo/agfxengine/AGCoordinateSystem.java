@@ -2,137 +2,108 @@ package com.jaigo.agfxengine;
 // AGCoordinateSystem
 //
 // Created by Jeff Gosling on 08/01/2015
+//
+// View coords run from [0,0] in top left to [width,height] in bottom right
+// GL   coords run from [-glWidth/2, -glHeight/2] to [glWidth/2, glHeight/2] in bottom right with [0,0] in center of screen
 
 public class AGCoordinateSystem
 {
-	private enum AspectRatioRelativity {
+	public enum AspectRatioRelativity {
+		None,
 		RelativeToWidth,
 		RelativeToHeight
 	}
 
-	private AspectRatioRelativity aspectRatioRelativity = AspectRatioRelativity.RelativeToWidth;
+	private AspectRatioRelativity aspectRatioRelativity = AspectRatioRelativity.None;
 
 	//OpenGL coordinates
-	public final float glCameraLeft;
-	public final float glCameraRight;
-	public final float glCameraTop;
-	public final float glCameraBottom;
-	public final float glCameraDistance;
-	public final float glCameraWidth;
-	public final float glCameraHeight;
+	private final float glCameraDistance;
+	private final float glCameraWidth;
+	private final float glCameraHeight;
 
 	//Real world pixel coordinates
-	private int widthPx;
-	private int heightPx;
+	private int viewWidthPx;
+	private int viewHeightPx;
 
-	public AGCoordinateSystem(float glCameraLeft, float glCameraRight, float glCameraTop, float glCameraBottom, float glCameraDistance)
+	public AGCoordinateSystem(float glCameraWidth, float glCameraHeight, float glCameraDistance)
 	{
-		this.glCameraLeft = glCameraLeft;
-		this.glCameraRight = glCameraRight;
-		this.glCameraTop = glCameraTop;
-		this.glCameraBottom = glCameraBottom;
+		this.glCameraWidth = glCameraWidth;
+		this.glCameraHeight = glCameraHeight;
 		this.glCameraDistance = glCameraDistance;
-
-		glCameraWidth = glCameraRight - glCameraLeft;
-		glCameraHeight = glCameraTop - glCameraBottom;
 	}
 
-	public void setWidthPx(int widthPx)
+	public void setAspectRatioRelativity(AspectRatioRelativity rel) { aspectRatioRelativity = rel; }
+
+	public void setViewWidthPx(int widthPx)
 	{
-		this.widthPx = widthPx;
+		viewWidthPx = widthPx;
 	}
 
-	public void setHeightPx(int heightPx)
+	public void setViewHeightPx(int heightPx)
 	{
-		this.heightPx = heightPx;
+		viewHeightPx = heightPx;
 	}
 
-	public int getWidthPx()
+	public float getGlCameraDistance() { return glCameraDistance; }
+
+	public int getViewWidthPx()
 	{
-		return widthPx;
+		return viewWidthPx;
 	}
 
-	public int getHeightPx()
+	public int getViewHeightPx()
 	{
-		return heightPx;
+		return viewHeightPx;
 	}
 
-	public float convertPixelValueToPercentageValue(int pixelValue)
-	{
-		int divisor = widthPx;
+	public float getGlCameraWidth() { return glCameraWidth; }
+	public float getGlCameraHeight() { return glCameraHeight; }
+	public float getGlCameraLeft() { return -getGlCameraWidth() / 2.0f; }
+	public float getGlCameraRight() { return getGlCameraWidth() / 2.0f; }
+	public float getGlCameraTop() { return getGlCameraHeight() / 2.0f; }
+	public float getGlCameraBottom() { return -getGlCameraHeight() / 2.0f; }
 
+	public float convertPercentageToGLValueX(float percent)
+	{
+		float result = percent - 0.5f;
+		result *= glCameraWidth;
+
+		return result;
+	}
+
+	public float convertPercentageToGLValueY(float percent)
+	{
+		float result = percent - 0.5f;
+		result *= glCameraHeight;
+
+		return result;
+	}
+
+	public float getWidthRatio()
+	{
 		if (aspectRatioRelativity == AspectRatioRelativity.RelativeToHeight) {
-			divisor = heightPx;
-		}
-
-		return (float) pixelValue / (float) divisor;
-	}
-
-	public int convertPercentageValueToPixelValue(float percent)
-	{
-		int relativeValue = widthPx;
-
-		if (aspectRatioRelativity == AspectRatioRelativity.RelativeToHeight) {
-			relativeValue = heightPx;
-		}
-
-		return Math.round(percent * relativeValue);
-	}
-
-	public float convertPercentageValueToGLValueX(float percent)
-	{
-		float relativeValue = glCameraWidth;
-
-		if (aspectRatioRelativity == AspectRatioRelativity.RelativeToHeight) {
-			relativeValue = glCameraHeight;
-		}
-
-		float percentOfGLViewport = relativeValue * percent;
-
-		return glCameraLeft * getWidthRatio() + (percentOfGLViewport * glCameraWidth);
-	}
-
-	public float convertPercentageValueToGLValueY(float percent)
-	{
-		float relativeValue = glCameraWidth;
-
-		if (aspectRatioRelativity == AspectRatioRelativity.RelativeToHeight) {
-			relativeValue = glCameraHeight;
-		}
-
-		float percentOfGLViewport = relativeValue * percent;
-
-		return glCameraBottom * getHeightRatio() + (percentOfGLViewport * glCameraHeight);
-	}
-
-	public float convertPixelValueToGLValueX(int pixelValue)
-	{
-		float percentValue = convertPixelValueToPercentageValue(pixelValue);
-
-		return convertPercentageValueToGLValueX(percentValue);
-	}
-
-	public float convertPixelValueToGLValueY(int pixelValue)
-	{
-		float percentValue = convertPixelValueToPercentageValue(pixelValue);
-
-		return convertPercentageValueToGLValueY(percentValue);
-	}
-
-	public float getWidthRatio() {
-		if (aspectRatioRelativity == AspectRatioRelativity.RelativeToHeight) {
-			return (float) widthPx / (float) heightPx;
+			return (float) viewWidthPx / (float) viewHeightPx;
 		}
 
 		return 1.0f;
 	}
 
-	public float getHeightRatio() {
-
+	public float getHeightRatio()
+	{
 		if (aspectRatioRelativity == AspectRatioRelativity.RelativeToWidth) {
-			return (float) heightPx / (float) widthPx;
+			return (float) viewHeightPx / (float) viewWidthPx;
 		}
 
 		return 1.0f;
+	}
+
+	public float widthPercentRelativeToHeight(float widthPercent)
+	{
+		return (widthPercent * viewWidthPx) / (float) viewHeightPx;
+	}
+
+	public float heightPercentRelativeToHeight(float heightPercent)
+	{
+		return (heightPercent * viewHeightPx) / (float) viewWidthPx;
 	}
 }

@@ -23,13 +23,6 @@ public class View extends BaseView
 
 	protected Color color = new Color(new float [] {1.0f, 0.0f, 1.0f, 1.0f});
 
-	public View(int widthPixels, int heightPixels)
-	{
-		super(widthPixels, heightPixels);
-
-		initialise();
-	}
-
 	public View(float widthPercent, float heightPercent)
 	{
 		super(widthPercent, heightPercent);
@@ -103,8 +96,8 @@ public class View extends BaseView
 			return;
 		}
 
-		glScale[0] = getWidthPercent();
-		glScale[1] = getHeightPercent();
+		glScale[0] = getWidth();
+		glScale[1] = getHeight();
 		glScale[2] = 1.0f;
 		glScale[3] = 1.0f;
 	}
@@ -117,18 +110,18 @@ public class View extends BaseView
 			return;
 		}
 
-		glTranslation[0] = getCenterXPercent() * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(getCenterXPercent());
-		glTranslation[1] = getCenterYPercent() * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueY(getCenterYPercent());
+		glTranslation[0] = AGEngine.Instance().getCoordinateSystem().convertPercentageToGLValueX(getCenterX());
+		glTranslation[1] = AGEngine.Instance().getCoordinateSystem().convertPercentageToGLValueY(getCenterY());
 		glTranslation[2] = 0.0f;
 		glTranslation[3] = 0.0f;
 
 		if (hasParent())
 		{
-			float parentCenterXPercent = getParent().getAbsoluteCenterPercentVector()[0];
-			float parentCenterYPercent = getParent().getAbsoluteCenterPercentVector()[1];
+			float parentCenterXPercent = getParent().getAbsoluteCenterVector()[0];
+			float parentCenterYPercent = getParent().getAbsoluteCenterVector()[1];
 
-			glTranslation[0] += parentCenterXPercent * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(parentCenterXPercent);;
-			glTranslation[1] += parentCenterYPercent * 2;//AGEngine.Instance().getCoordinateSystem().convertPercentageValueToGLValueX(parentCenterYPercent);;
+			glTranslation[0] += AGEngine.Instance().getCoordinateSystem().convertPercentageToGLValueX(parentCenterXPercent);;
+			glTranslation[1] += AGEngine.Instance().getCoordinateSystem().convertPercentageToGLValueY(parentCenterYPercent);;
 		}
 
 		for (BaseView child : getChildren()) {

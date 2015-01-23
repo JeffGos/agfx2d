@@ -6,6 +6,11 @@ package com.jaigo.agfxengine.common;
 
 public class Color
 {
+	public static final int R = 0;
+	public static final int G = 1;
+	public static final int B = 2;
+	public static final int A = 3;
+
 	public static final float [] RED = new float [] { 1, 0, 0, 1};
 	public static final float [] GREEN = new float [] { 0, 1, 0, 1};
 	public static final float [] BLUE = new float [] { 0, 0, 1, 1};
@@ -28,18 +33,28 @@ public class Color
 
 	public void set(float red, float green, float blue)
 	{
-		rgba[0] = red;
-		rgba[1] = green;
-		rgba[2] = blue;
+		rgba[R] = red;
+		rgba[G] = green;
+		rgba[B] = blue;
 	}
 
 	public void setAlpha(float alpha)
 	{
-		rgba[3] = alpha;
+		rgba[A] = alpha;
 	}
 
 	public float [] getArray()
 	{
 		return rgba;
+	}
+
+	public void copy(Color copy)
+	{
+		float [] copyArray = copy.getArray();
+
+		rgba[R] = copyArray[R];
+		rgba[G] = copyArray[G];
+		rgba[B] = copyArray[B];
+		rgba[A] = copyArray[A];
 	}
 }

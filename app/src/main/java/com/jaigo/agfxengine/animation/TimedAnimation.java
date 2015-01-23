@@ -1,5 +1,5 @@
 package com.jaigo.agfxengine.animation;
-// ElapsingAnimation
+// TimedAnimation
 //
 // Created by Jeff Gosling on 12/01/2015
 

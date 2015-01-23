@@ -12,7 +12,6 @@ public class ViewManager
 {
 	private BaseView rootView = null;
 	private BaseView touchedView = null;
-	private BaseView draggedView = null;
 	private boolean initialised;
 
 	public void initialise()
@@ -57,22 +56,30 @@ public class ViewManager
 		rootView.clearChildren();
 	}
 
-	public void onViewSurfaceTouched(int touchX, int touchY, int motionEventAction)
+	public void onViewSurfaceTouched(float touchPercentX, float touchPercentY, int motionEventAction)
 	{
 		if (motionEventAction == MotionEvent.ACTION_MOVE)
 		{
-			if (draggedView != null)
+			if (touchedView != null)
 			{
-				draggedView.onDragged(touchX, touchY);
+				if (!touchedView.isValueWithinView(touchPercentX, touchPercentY))
+				{
+					touchedView.onReleased(touchPercentX, touchPercentY);
+					touchedView = null;
+				}
+				else
+				{
+					touchedView.onDragged(touchPercentX, touchPercentY);
+				}
 			}
 		}
 		else if (motionEventAction == (MotionEvent.ACTION_DOWN) || motionEventAction == (MotionEvent.ACTION_UP))
 		{
-			handleTouchEvent(rootView, touchX, touchY, motionEventAction);
+			handleTouchEvent(rootView, touchPercentX, touchPercentY, motionEventAction);
 		}
 	}
 
-	private void handleTouchEvent(BaseView viewToCheck, int touchX, int touchY, int motionEventAction)
+	private void handleTouchEvent(BaseView viewToCheck, float touchPercentX, float touchPercentY, int motionEventAction)
 	{
 		if (viewToCheck == null || !viewToCheck.isEnabled() || !viewToCheck.isVisible())
 		{
@@ -85,9 +92,9 @@ public class ViewManager
 		{
 			BaseView child = viewToCheck.getChild(i);
 
-			if (child.isValuePixelsWithinView(touchX, touchY))
+			if (child.isValueWithinView(touchPercentX, touchPercentY))
 			{
-				handleTouchEvent(child, touchX, touchY, motionEventAction);
+				handleTouchEvent(child, touchPercentX, touchPercentY, motionEventAction);
 				handledByChild = true;
 			}
 		}
@@ -99,16 +106,22 @@ public class ViewManager
 			{
 				touchedView = viewToCheck;
 
-				viewToCheck.onTouched(touchX, touchY);
+				viewToCheck.onTouched(touchPercentX, touchPercentY);
 			}
 			else if (motionEventAction == (MotionEvent.ACTION_UP))
 			{
-				if (viewToCheck == touchedView) {
-					viewToCheck.onClicked(touchX, touchY);
+				if (touchedView != null)
+				{
+					if (touchedView == viewToCheck)
+					{
+						touchedView.onClicked(touchPercentX, touchPercentY);
+					}
+
+					touchedView.onReleased(touchPercentX, touchPercentY);
+					touchedView = null;
 				}
 
-				touchedView = null;
-				viewToCheck.onReleased(touchX, touchY);
+				viewToCheck.onReleased(touchPercentX, touchPercentY);
 			}
 		}
 	}

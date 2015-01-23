@@ -61,27 +61,25 @@ public class MainActivity extends Activity implements AGEngineEventListener
 	private void createScene()
 	{
 		scene = new BaseView(1.0f, 1.0f);
-
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opengleslogo);
-		final Image image = new Image(600, 210, bitmap);
-		image.setCenterPercent(0, 0.4f);
+		final Image image = new Image(0.6f, 0.6f, bitmap);
+		image.setCenter(0.5f, 0.9f);
 		scene.addChild(image);
 
-		View square = new View(0.6f, 0.6f);
-		square.setCenterPercent(0, 0);
+		View square = new View(0.5f, AGEngine.CoordinateSystem().widthPercentRelativeToHeight(0.5f));
 		square.setColor(new Color(Color.BLUE));
+		square.setDraggable(true);
 		scene.addChild(square);
 
-		final Image image2 = new Image(600, 210, bitmap);
+		final Image image2 = new Image(0.6f, 0.6f, bitmap);
+		image2.setCenter(0.5f, 0.1f);
 		scene.addChild(image2);
 
-		Button button = new Button(0.4f, 0.1f);
-		button.setCenterPercent(0, -0.2f);
-		button.setColor(new Color(Color.RED));
-		button.setTouchColor(new Color(Color.GREEN));
-		scene.addChild(button);
-
-		AGEngine.ViewManager().addView(scene);
+		Button btn = new Button(0.4f, 0.1f);
+		btn.setCenter(0.5f, 0.3f);
+		btn.setColor(new Color(Color.RED));
+		btn.setTouchColor(new Color(Color.BLACK));
+		scene.addChild(btn);
 
 		Animation spinRepeat = new Animation()
 		{
@@ -92,7 +90,7 @@ public class MainActivity extends Activity implements AGEngineEventListener
 			@Override
 			public void animate()
 			{
-				image.scaleByPercent(scaleIncrement, scaleIncrement);
+				image.scaleBy(scaleIncrement, scaleIncrement);
 				image.rotateZByAngle(rotateIncrement);
 				timer++;
 
@@ -104,6 +102,8 @@ public class MainActivity extends Activity implements AGEngineEventListener
 			}
 		};
 
-		AGEngine.AnimationManager().addAnimator(spinRepeat);
+		spinRepeat.start();
+
+		AGEngine.ViewManager().addView(scene);
 	}
 }

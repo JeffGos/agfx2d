@@ -5,6 +5,7 @@ package com.jaigo.agfxengine.shader;
 
 import android.opengl.GLES20;
 
+import com.jaigo.agfxengine.AGEngine;
 import com.jaigo.agfxengine.common.CommonUtils;
 
 import java.nio.ByteBuffer;
@@ -27,10 +28,10 @@ public class NonTexturedShader extends BaseShader
 	{
 		float[] vertices = new float[]
 				{
-						-1.0f, -1.0f, 0.0f,
-						1.0f, -1.0f, 0.0f,
-						-1.0f, 1.0f, 0.0f,
-						1.0f, 1.0f, 0.0f
+						AGEngine.CoordinateSystem().getGlCameraLeft(), AGEngine.CoordinateSystem().getGlCameraBottom(), 0.0f,
+						AGEngine.CoordinateSystem().getGlCameraRight(), AGEngine.CoordinateSystem().getGlCameraBottom(), 0.0f,
+						AGEngine.CoordinateSystem().getGlCameraLeft(), AGEngine.CoordinateSystem().getGlCameraTop(), 0.0f,
+						AGEngine.CoordinateSystem().getGlCameraRight(), AGEngine.CoordinateSystem().getGlCameraTop(), 0.0f
 				};
 
 		short[] drawOrder = new short[] { 0, 1, 2, 3 };

@@ -3,7 +3,6 @@ package com.jaigo.agfxengine.view;
 //
 // Created by Jeff Gosling on 08/01/2015
 
-import com.jaigo.agfxengine.AGEngine;
 import com.jaigo.agfxengine.view.listeners.OnClickListener;
 import com.jaigo.agfxengine.view.listeners.OnDragListener;
 import com.jaigo.agfxengine.view.listeners.OnReleaseListener;
@@ -16,15 +15,10 @@ public class BaseView
 	private BaseView parent;
 	private CopyOnWriteArrayList<BaseView> children = new CopyOnWriteArrayList<BaseView>();
 
-	private int widthPx;
-	private int heightPx;
-	private int centerXPx;
-	private int centerYPx;
-
 	private float widthPercent;
 	private float heightPercent;
-	private float centerXPercent;
-	private float centerYPercent;
+	private float centerPercentX = 0.5f;
+	private float centerPercentY = 0.5f;
 
 	private float rotateXAngle = 0.0f;
 	private float rotateYAngle = 0.0f;
@@ -32,11 +26,12 @@ public class BaseView
 
 	private boolean isVisible = true;
 	private boolean isEnabled = true;
+	private boolean isDraggable = false;
 
-	protected float startTouchXPercent;
-	protected float startTouchYPercent;
-	protected volatile float lastTouchedXPercent = 0.0f;
-	protected volatile float lastTouchedYPercent = 0.0f;
+	protected float startTouchPercentX;
+	protected float startTouchPercentY;
+	protected volatile float lastTouchedPercentX = 0.0f;
+	protected volatile float lastTouchedPercentY = 0.0f;
 
 	protected boolean isDragged = false;
 	protected boolean isTouched = false;
@@ -46,16 +41,10 @@ public class BaseView
 	protected OnTouchListener onTouchListener;
 	protected OnReleaseListener onReleaseListener;
 
-	public BaseView(int widthPixels, int heightPixels)
-	{
-		setWidthPx(widthPixels);
-		setHeightPx(heightPixels);
-	}
-
 	public BaseView(float widthPercent, float heightPercent)
 	{
-		setWidthPercent(widthPercent);
-		setHeightPercent(heightPercent);
+		setWidth(widthPercent);
+		setHeight(heightPercent);
 	}
 
 	public boolean hasParent()
@@ -107,7 +96,6 @@ public class BaseView
 
 	public BaseView removeChild(BaseView child)
 	{
-		//child.parent = null;
 		children.remove(child);
 		return this;
 	}
@@ -164,10 +152,20 @@ public class BaseView
 		return this;
 	}
 
-	public final void onTouched(float touchX, float touchY)
+	public boolean isDraggable()
 	{
-		startTouchXPercent = lastTouchedXPercent = touchX;
-		startTouchYPercent = lastTouchedYPercent = touchY;
+		return isDraggable;
+	}
+
+	public void setDraggable(boolean isDraggable)
+	{
+		this.isDraggable = isDraggable;
+	}
+
+	public final void onTouched(float touchPercentX, float touchPercentY)
+	{
+		startTouchPercentX = lastTouchedPercentX = touchPercentX;
+		startTouchPercentY = lastTouchedPercentY = touchPercentY;
 
 		isTouched = true;
 
@@ -181,21 +179,18 @@ public class BaseView
 
 	protected void onTouched() {}
 
-	public final void onDragged(float touchX, float touchY)
+	public final void onDragged(float touchPercentX, float touchPercentY)
 	{
 		if (!isTouched)
 		{
 			return;
 		}
 
-		float dragAmountX = touchX - lastTouchedXPercent;
-		float dragAmountY = touchY - lastTouchedYPercent;
-
 		if (!isDragged)
 		{
-			float dragAmountXSinceStart = touchX - startTouchXPercent;
-			float dragAmountYSinceStart = touchX - startTouchYPercent;
-			final float DRAG_AMOUNT_THRESHOLD = 0.15f;
+			float dragAmountXSinceStart = touchPercentX - startTouchPercentX;
+			float dragAmountYSinceStart = touchPercentX - startTouchPercentY;
+			final float DRAG_AMOUNT_THRESHOLD = 0.05f;
 
 			if (Math.abs(dragAmountXSinceStart) > DRAG_AMOUNT_THRESHOLD || Math.abs(dragAmountYSinceStart) > DRAG_AMOUNT_THRESHOLD)
 			{
@@ -203,20 +198,31 @@ public class BaseView
 			}
 		}
 
-		lastTouchedXPercent = touchX;
-		lastTouchedYPercent = touchY;
-
-		if (onDragListener != null)
+		if (isDragged)
 		{
-			onDragListener.onDrag(this, dragAmountX, dragAmountY);
-		}
+			float dragAmountX = touchPercentX - lastTouchedPercentX;
+			float dragAmountY = touchPercentY - lastTouchedPercentY;
 
-		onDragged();
+			if (onDragListener != null)
+			{
+				onDragListener.onDrag(this, dragAmountX, dragAmountY);
+			}
+
+			if (isDraggable)
+			{
+				moveBy(dragAmountX, dragAmountY);
+			}
+
+			onDragged();
+
+			lastTouchedPercentX = touchPercentX;
+			lastTouchedPercentY = touchPercentY;
+		}
 	}
 
 	protected void onDragged() {}
 
-	public final void onReleased(float touchX, float touchY)
+	public final void onReleased(float touchPercentX, float touchPercentY)
 	{
 		isTouched = false;
 		isDragged = false;
@@ -229,9 +235,9 @@ public class BaseView
 		onReleased();
 	}
 
-	public void onReleased() {}
+	protected void onReleased() {}
 
-	public final void onClicked(float touchX, float touchY)
+	public final void onClicked(float touchPercentX, float touchPercentY)
 	{
 		if (onClickListener != null)
 		{
@@ -275,149 +281,107 @@ public class BaseView
 		}
 	}
 
-	public BaseView setDimensionsPx(int widthPx, int heightPx) {
-		setWidthPx(widthPx);
-		setHeightPx(widthPx);
+	public BaseView setDimensions(float widthPercent, float heightPercent) {
+		setWidth(widthPercent);
+		setHeight(heightPercent);
 
 		return this;
 	}
 
-	public BaseView setDimensionsPercent(float widthPercent, float heightPercent) {
-		setWidthPercent(widthPercent);
-		setHeightPercent(heightPercent);
-
-		return this;
-	}
-
-	public BaseView setWidthPx(int widthPx)
-	{
-		this.widthPx = widthPx;
-		this.widthPercent = AGEngine.Instance().getCoordinateSystem().convertPixelValueToPercentageValue(widthPx);
-
-		onDimensionsChanged();
-
-		return this;
-	}
-
-	public BaseView setWidthPercent(float widthPercent)
+	public BaseView setWidth(float widthPercent)
 	{
 		this.widthPercent = widthPercent;
-		this.widthPx = AGEngine.Instance().getCoordinateSystem().convertPercentageValueToPixelValue(widthPercent);
 
 		onDimensionsChanged();
 
 		return this;
 	}
 
-	public BaseView setHeightPx(int heightPx)
-	{
-		this.heightPx = heightPx;
-		this.heightPercent = AGEngine.Instance().getCoordinateSystem().convertPixelValueToPercentageValue(heightPx);
-
-		onDimensionsChanged();
-
-		return this;
-	}
-
-	public BaseView setHeightPercent(float heightPercent)
+	public BaseView setHeight(float heightPercent)
 	{
 		this.heightPercent = heightPercent;
-		this.heightPx =  AGEngine.Instance().getCoordinateSystem().convertPercentageValueToPixelValue(heightPercent);
 
 		onDimensionsChanged();
 
 		return this;
 	}
 
-	public BaseView moveByPx(float xChangePixel, float yChangePixel)
+	public BaseView moveBy(float movePercentX, float movePercentY)
 	{
-		setCenterPx(centerXPx + Math.round(xChangePixel), centerYPx + Math.round(yChangePixel));
-
-		onPositionChanged();
+		setCenter(centerPercentX + movePercentX, centerPercentY + movePercentY);
 
 		return this;
 	}
 
-	public BaseView scaleByPercent(float widthChangePercent, float heightChangePercent)
+	public BaseView scaleBy(float widthChangePercent, float heightChangePercent)
 	{
-		setWidthPercent(widthPercent + widthChangePercent);
-		setHeightPercent(heightPercent + heightChangePercent);
+		setWidth(widthPercent + widthChangePercent);
+		setHeight(heightPercent + heightChangePercent);
 
 		return this;
 	}
 
-	public BaseView setCenterPx(int xPixels, int yPixels)
-	{
-		centerXPx = xPixels;
-		centerYPx = yPixels;
-
-		centerXPercent = AGEngine.Instance().getCoordinateSystem().convertPixelValueToPercentageValue(centerXPx);
-		centerYPercent = AGEngine.Instance().getCoordinateSystem().convertPixelValueToPercentageValue(centerYPx);
-
-		onPositionChanged();
-
-		return this;
-	}
-
-	public BaseView setCenterPercent(float xPercent, float yPercent)
-	{
-		centerXPercent = xPercent;
-		centerYPercent = yPercent;
-
-		centerXPx = AGEngine.Instance().getCoordinateSystem().convertPercentageValueToPixelValue(centerXPercent);
-		centerYPx = AGEngine.Instance().getCoordinateSystem().convertPercentageValueToPixelValue(centerYPercent);
-
-		onPositionChanged();
-
-		return this;
-	}
-
-	public int getWidthPx()
-	{
-		return widthPx;
-	}
-
-	public float getWidthPercent()
+	public float getWidth()
 	{
 		return widthPercent;
 	}
 
-	public int getHeightPx()
-	{
-		return heightPx;
-	}
-
-	public float getHeightPercent()
+	public float getHeight()
 	{
 		return heightPercent;
 	}
 
-	public int getCenterXPx()
+	public float getCenterX()
 	{
-		return centerXPx;
+		return centerPercentX;
 	}
 
-	public int getCenterYPx()
+	public float getCenterY()
 	{
-		return centerYPx;
+		return centerPercentY;
 	}
 
-	public float getCenterXPercent()
+	public float [] getCenterVector() {
+		return new float[] {centerPercentX, centerPercentY};
+	}
+
+	public BaseView setCenter(float xPercent, float yPercent)
 	{
-		return centerXPercent;
+		centerPercentX = xPercent;
+		centerPercentY = yPercent;
+
+		onPositionChanged();
+
+		return this;
 	}
 
-	public float getCenterYPercent()
+	public boolean isValueWithinView(float xPercent, float yPercent)
 	{
-		return centerYPercent;
+		float[] absoluteCenter = getAbsoluteCenterVector();
+
+		boolean result = Math.abs(xPercent - absoluteCenter[0]) <= widthPercent / 2.0f;
+		result &= Math.abs(yPercent - absoluteCenter[1]) <= heightPercent / 2.0f;
+
+		return result;
 	}
 
-	public float [] getCenterPxVector() {
-		return new float[] {centerXPx, centerYPx};
-	}
+	public float[] getAbsoluteCenterVector()
+	{
+		float[] result = new float[2];
 
-	public float [] getCenterPercentVector() {
-		return new float[] {centerXPercent, centerYPercent};
+		if (getParent() != null)
+		{
+			result[0] = centerPercentX + (getParent().getCenterX() - 0.5f);
+			result[1] = centerPercentY + (getParent().getCenterY() - 0.5f);
+
+			return result;
+		}
+		else
+		{
+			result = getCenterVector();
+		}
+
+		return result;
 	}
 
 	public void resetRotation() {
@@ -474,64 +438,6 @@ public class BaseView
 	public void rotateZByAngle(float angle) {
 		rotateZAngle += angle;
 		onOrientationChanged();
-	}
-
-	public boolean isValuePercentWithinView(float xPercent, float yPercent)
-	{
-		float[] absoluteCenter = getAbsoluteCenterPercentVector();
-
-		boolean result = Math.abs(xPercent - absoluteCenter[0]) <= widthPercent / 2.0f;
-		result &= Math.abs(yPercent - absoluteCenter[1]) <= heightPercent / 2.0f;
-
-		return result;
-	}
-
-	public boolean isValuePixelsWithinView(int x, int y)
-	{
-		float[] absoluteCenterPx = getAbsoluteCenterPxVector();
-
-		boolean result = Math.abs(x - absoluteCenterPx[0]) <= widthPx / 2.0f;
-		result &= Math.abs(y - absoluteCenterPx[1]) <= heightPx / 2.0f;
-
-		return result;
-	}
-
-	public float[] getAbsoluteCenterPxVector()
-	{
-		float[] result = new float[2];
-
-		if (getParent() != null)
-		{
-			result[0] = centerXPx + getParent().getCenterXPx();
-			result[1] = centerYPx + getParent().getCenterYPx();
-
-			return result;
-		}
-		else
-		{
-			result = getCenterPxVector();
-		}
-
-		return result;
-	}
-
-	public float[] getAbsoluteCenterPercentVector()
-	{
-		float[] result = new float[2];
-
-		if (getParent() != null)
-		{
-			result[0] = centerXPercent + getParent().getCenterXPercent();
-			result[1] = centerYPercent + getParent().getCenterYPercent();
-
-			return result;
-		}
-		else
-		{
-			result = getCenterPercentVector();
-		}
-
-		return result;
 	}
 
 	protected void onDimensionsChanged()

@@ -30,11 +30,13 @@ public class AGEngine
 		return instance;
 	}
 
+	public static AGCoordinateSystem CoordinateSystem() { return coordinateSystem; }
 	public static TextureManager TextureManager() { return textureManager; }
 	public static ShaderManager ShaderManager() { return shaderManager; }
 	public static ViewManager ViewManager() { return viewManager; }
 	public static AnimationManager AnimationManager() { return animationManager; }
 
+	private static AGCoordinateSystem coordinateSystem = new AGCoordinateSystem(2.0f, 2.0f, 5.0f);
 	private static AGEngine instance;
 	private static TextureManager textureManager;
 	private static ShaderManager shaderManager;
@@ -42,8 +44,6 @@ public class AGEngine
 	private static AnimationManager animationManager;
 
 	private Context context;
-	private AGCoordinateSystem coordinateSystem;
-
 	private boolean initialised;
 
 	private AGEngineEventListener eventListener;
@@ -51,8 +51,6 @@ public class AGEngine
 	private AGEngine(Context context)
 	{
 		this.context = context;
-
-		coordinateSystem = new AGCoordinateSystem(-1.0f, 1.0f, 1.0f, -1.0f, 5.0f);
 
 		textureManager = new TextureManager();
 		shaderManager = new ShaderManager();
@@ -80,12 +78,8 @@ public class AGEngine
 	{
 		Log.d(LogTags.OPEN_GL, "AGEngine.onGLSurfaceResized. w = " + width + " h = " + height);
 
-		coordinateSystem.setWidthPx(width);
-		coordinateSystem.setHeightPx(height);
-
-		float heightOverWidth = (float)height / (float)width;
-		float widthOverHeight = (float)width / (float)height;
-		float cameraDistance = 5.0f;
+		coordinateSystem.setViewWidthPx(width);
+		coordinateSystem.setViewHeightPx(height);
 
 		//set up the camera and projection
 		GLES20.glViewport(0, 0, width, height);
@@ -95,14 +89,16 @@ public class AGEngine
 		float[] vpMatrix = new float[16];
 
 		Matrix.frustumM(projMatrix, 0, 		//m, offset,
-				1.0f, -1.0f, 		// left, right,
-				-1.0f * heightOverWidth, 1.0f * heightOverWidth, 		// bottom, top,
-				cameraDistance, 		// near,
-				cameraDistance * 1.5f); 		// far
+				-coordinateSystem.getGlCameraLeft(),
+				-coordinateSystem.getGlCameraRight(),
+				coordinateSystem.getGlCameraBottom(),
+				coordinateSystem.getGlCameraTop(),
+				coordinateSystem.getGlCameraDistance(), 		// near,
+				coordinateSystem.getGlCameraDistance() * 1.5f); 		// far
 
 		// Set the camera position (View matrix)
 		Matrix.setLookAtM(viewMatrix, 0, // rm, rmOffset,
-				0, 0, -cameraDistance, // eyeX, eyeY, eyeZ,
+				0, 0, -coordinateSystem.getGlCameraDistance(), // eyeX, eyeY, eyeZ,
 				0f, 0f, 0f, // centerX, centerY, centerZ,
 				0f, 1.0f, 0.0f); // upX, upY, upZ
 

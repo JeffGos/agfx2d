@@ -41,9 +41,12 @@ public class TextureManager
 		initialised = false;
 	}
 
-	public TextureInfo addTexture(int widthPx, int heightPx, TextureBitmapProvider textureBitmapProvider)
+	public TextureInfo addTexture(TextureBitmapProvider textureBitmapProvider)
 	{
 		Log.d(LogTags.OPEN_GL, "TextureManager.addTexture()");
+
+		int widthPx = textureBitmapProvider.getTextureWidth();
+		int heightPx = textureBitmapProvider.getTextureHeight();
 
 		Texture texture = new Texture(widthPx, heightPx);
 		texture.setTextureBitmapProvider(textureBitmapProvider);

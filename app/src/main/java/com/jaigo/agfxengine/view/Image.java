@@ -8,19 +8,16 @@ import android.graphics.Bitmap;
 public class Image extends TexturedView
 {
 	private Bitmap image;
+	private float imageAspectRatio = 1.0f;
 
 	public Image(float widthPercent, float heightPercent, Bitmap image)
 	{
 		super(widthPercent, heightPercent);
 		this.image = image;
 
-		initTexture();
-	}
+		imageAspectRatio = ((float)image.getHeight()) / ((float)image.getWidth());
 
-	public Image(int widthPixels, int heightPixels, Bitmap bitmap)
-	{
-		super(widthPixels, heightPixels);
-		image = bitmap;
+		setHeight(heightPercent * imageAspectRatio);
 
 		initTexture();
 	}
@@ -29,5 +26,17 @@ public class Image extends TexturedView
 	public Bitmap getTextureBitmap()
 	{
 		return image;
+	}
+
+	@Override
+	public int getTextureWidth()
+	{
+		return image.getWidth();
+	}
+
+	@Override
+	public int getTextureHeight()
+	{
+		return image.getHeight();
 	}
 }
