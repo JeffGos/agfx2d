@@ -162,28 +162,32 @@ public class BaseView
 		this.isDraggable = isDraggable;
 	}
 
-	public final void onTouched(float touchPercentX, float touchPercentY)
+	public final boolean onTouched(float touchPercentX, float touchPercentY)
 	{
 		startTouchPercentX = lastTouchedPercentX = touchPercentX;
 		startTouchPercentY = lastTouchedPercentY = touchPercentY;
 
 		isTouched = true;
 
+		boolean handled = false;
+
 		if (onTouchListener != null)
 		{
-			onTouchListener.onTouched(this);
+			handled |= onTouchListener.onTouched(this);
 		}
 
-		onTouched();
+		handled |= onTouched();
+
+		return handled;
 	}
 
-	protected void onTouched() {}
+	protected boolean onTouched() { return false; }
 
-	public final void onDragged(float touchPercentX, float touchPercentY)
+	public final boolean onDragged(float touchPercentX, float touchPercentY)
 	{
 		if (!isTouched)
 		{
-			return;
+			return false;
 		}
 
 		if (!isDragged)
@@ -198,6 +202,8 @@ public class BaseView
 			}
 		}
 
+		boolean handled = false;
+
 		if (isDragged)
 		{
 			float dragAmountX = touchPercentX - lastTouchedPercentX;
@@ -205,7 +211,7 @@ public class BaseView
 
 			if (onDragListener != null)
 			{
-				onDragListener.onDrag(this, dragAmountX, dragAmountY);
+				handled |= onDragListener.onDrag(this, dragAmountX, dragAmountY);
 			}
 
 			if (isDraggable)
@@ -213,36 +219,46 @@ public class BaseView
 				moveBy(dragAmountX, dragAmountY);
 			}
 
-			onDragged();
+			handled |= onDragged();
 
 			lastTouchedPercentX = touchPercentX;
 			lastTouchedPercentY = touchPercentY;
 		}
+
+		return handled;
 	}
 
-	protected void onDragged() {}
+	protected boolean onDragged() { return false; }
 
-	public final void onReleased(float touchPercentX, float touchPercentY)
+	public final boolean onReleased(float touchPercentX, float touchPercentY)
 	{
 		isTouched = false;
 		isDragged = false;
 
+		boolean handled = false;
+
 		if (onReleaseListener != null)
 		{
-			onReleaseListener.onRelease(this);
+			handled |= onReleaseListener.onRelease(this);
 		}
 
-		onReleased();
+		handled |= onReleased();
+
+		return handled;
 	}
 
-	protected void onReleased() {}
+	protected boolean onReleased() { return false; }
 
-	public final void onClicked(float touchPercentX, float touchPercentY)
+	public final boolean onClicked(float touchPercentX, float touchPercentY)
 	{
+		boolean handled = false;
+
 		if (onClickListener != null)
 		{
-			onClickListener.onClick(this);
+			handled |= onClickListener.onClick(this);
 		}
+
+		return handled;
 	}
 
 	public BaseView setOnClickListener(OnClickListener listener)

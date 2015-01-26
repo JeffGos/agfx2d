@@ -7,5 +7,5 @@ import com.jaigo.agfxengine.view.BaseView;
 
 public interface OnReleaseListener
 {
-	public void onRelease(BaseView view);
+	public boolean onRelease(BaseView view);
 }

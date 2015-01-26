@@ -7,5 +7,5 @@ import com.jaigo.agfxengine.view.BaseView;
 
 public interface OnClickListener
 {
-	public void onClick(BaseView view);
+	public boolean onClick(BaseView view);
 }

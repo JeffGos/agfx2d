@@ -63,15 +63,18 @@ public class Button extends View
 	}
 
 	@Override
-	protected void onTouched()
+	protected boolean onTouched()
 	{
 		colorAnimation.stop();
 		color.copy(touchColor);
+
+		return false;
 	}
 
 	@Override
-	protected void onReleased()
+	protected boolean onReleased()
 	{
 		colorAnimation.start();
+		return false;
 	}
 }
