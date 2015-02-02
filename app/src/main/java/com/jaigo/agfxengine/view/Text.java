@@ -4,7 +4,7 @@ package com.jaigo.agfxengine.view;
 // Created by Jeff Gosling on 24/01/2015
 
 import com.jaigo.agfxengine.AGEngine;
-import com.jaigo.agfxengine.Font;
+import com.jaigo.agfxengine.common.Font;
 import com.jaigo.agfxengine.common.Color;
 import com.jaigo.agfxengine.texture.TextureInfo;
 

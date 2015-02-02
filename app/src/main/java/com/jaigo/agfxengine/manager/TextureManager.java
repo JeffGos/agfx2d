@@ -1,4 +1,4 @@
-package com.jaigo.agfxengine.texture;
+package com.jaigo.agfxengine.manager;
 // TextureManager
 //
 // Created by Jeff Gosling on 11/01/2015
@@ -7,6 +7,9 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.jaigo.agfxengine.common.LogTags;
+import com.jaigo.agfxengine.texture.Texture;
+import com.jaigo.agfxengine.texture.TextureBitmapProvider;
+import com.jaigo.agfxengine.texture.TextureInfo;
 
 import java.util.HashMap;
 import java.util.UUID;

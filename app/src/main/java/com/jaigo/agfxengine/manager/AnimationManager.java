@@ -1,7 +1,9 @@
-package com.jaigo.agfxengine.animation;
+package com.jaigo.agfxengine.manager;
 // AnimationManager
 //
 // Created by Jeff Gosling on 12/01/2015
+
+import com.jaigo.agfxengine.animation.Animation;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 

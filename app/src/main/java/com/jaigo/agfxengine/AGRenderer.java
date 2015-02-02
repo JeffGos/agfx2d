@@ -14,11 +14,13 @@ import com.jaigo.agfxengine.common.LogTags;
 public class AGRenderer implements GLSurfaceView.Renderer
 {
 	public AGSurfaceView agSurfaceView;
-
 	public AGRenderer(AGSurfaceView agSurfaceView)
 	{
 		this.agSurfaceView = agSurfaceView;
 	}
+
+	private int framesPerSecond = 0;
+	private long lastFPSCheckTimeMs = 0;
 
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig eglConfig)
@@ -36,6 +38,8 @@ public class AGRenderer implements GLSurfaceView.Renderer
 		AGEngine.Instance().onGLSurfaceResized(width, height);
 	}
 
+
+
 	@Override
 	public void onDrawFrame(GL10 unused)
 	{
@@ -43,5 +47,24 @@ public class AGRenderer implements GLSurfaceView.Renderer
 
 		AGEngine.AnimationManager().runAnimators();
 		AGEngine.ViewManager().drawViews();
+
+		updateFPS();
+	}
+
+	public int getFramesPerSecond()
+	{
+		Log.d(LogTags.OPEN_GL, "FPS = " + framesPerSecond);
+		return framesPerSecond;
+	}
+
+	private void updateFPS()
+	{
+		framesPerSecond++;
+		long currentFPSCheckTimeMs = System.currentTimeMillis();
+
+		if (currentFPSCheckTimeMs - lastFPSCheckTimeMs >= 1000) {
+			framesPerSecond = 0;
+			lastFPSCheckTimeMs = currentFPSCheckTimeMs;
+		}
 	}
 }

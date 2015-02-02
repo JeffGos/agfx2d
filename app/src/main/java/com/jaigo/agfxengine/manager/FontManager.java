@@ -1,10 +1,13 @@
-package com.jaigo.agfxengine;
+package com.jaigo.agfxengine.manager;
 // FontManager
 //
 // Created by Jeff Gosling on 28/01/2015
 //
 
 import android.graphics.Typeface;
+
+import com.jaigo.agfxengine.AGEngine;
+import com.jaigo.agfxengine.common.Font;
 
 import java.util.UUID;
 

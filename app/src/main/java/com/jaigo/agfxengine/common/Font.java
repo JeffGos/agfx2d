@@ -1,4 +1,4 @@
-package com.jaigo.agfxengine;
+package com.jaigo.agfxengine.common;
 // Font
 //
 // Created by Jeff Gosling on 28/01/2015

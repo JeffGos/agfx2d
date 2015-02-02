@@ -1,4 +1,4 @@
-package com.jaigo.agfxengine.view;
+package com.jaigo.agfxengine.manager;
 // ViewManager
 //
 // Created by Jeff Gosling on 09/01/2015
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.jaigo.agfxengine.common.LogTags;
+import com.jaigo.agfxengine.view.BaseView;
+import com.jaigo.agfxengine.view.TexturedView;
 
 public class ViewManager
 {

@@ -8,11 +8,12 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.jaigo.agfxengine.animation.AnimationManager;
+import com.jaigo.agfxengine.manager.AnimationManager;
 import com.jaigo.agfxengine.common.LogTags;
-import com.jaigo.agfxengine.view.ViewManager;
-import com.jaigo.agfxengine.shader.ShaderManager;
-import com.jaigo.agfxengine.texture.TextureManager;
+import com.jaigo.agfxengine.manager.FontManager;
+import com.jaigo.agfxengine.manager.ViewManager;
+import com.jaigo.agfxengine.manager.ShaderManager;
+import com.jaigo.agfxengine.manager.TextureManager;
 
 public class AGEngine
 {

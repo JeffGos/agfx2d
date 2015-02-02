@@ -1,4 +1,4 @@
-package com.jaigo.agfxengine.shader;
+package com.jaigo.agfxengine.manager;
 // ShaderManager
 //
 // Created by Jeff on 11/01/2015
@@ -7,6 +7,10 @@ import android.util.Log;
 
 import com.jaigo.agfx2d.R;
 import com.jaigo.agfxengine.common.LogTags;
+import com.jaigo.agfxengine.shader.BaseShader;
+import com.jaigo.agfxengine.shader.NonTexturedShader;
+import com.jaigo.agfxengine.shader.ShaderInfo;
+import com.jaigo.agfxengine.shader.TexturedShader;
 
 import java.util.ArrayList;
 
