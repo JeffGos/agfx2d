@@ -112,6 +112,7 @@ public class Texture
 
 	public void release()
 	{
+		Log.d(LogTags.OPEN_GL, "Texture.release - deleting texture " + glTextureHandle);
 		GLES20.glDeleteTextures(1, new int [] { glTextureHandle }, 0);
 	}
 }

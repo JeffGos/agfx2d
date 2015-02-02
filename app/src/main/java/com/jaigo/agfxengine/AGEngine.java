@@ -35,6 +35,7 @@ public class AGEngine
 	public static ShaderManager ShaderManager() { return shaderManager; }
 	public static ViewManager ViewManager() { return viewManager; }
 	public static AnimationManager AnimationManager() { return animationManager; }
+	public static FontManager FontManager() { return fontManager; }
 
 	private static AGCoordinateSystem coordinateSystem = new AGCoordinateSystem(2.0f, 2.0f, 5.0f);
 	private static AGEngine instance;
@@ -42,6 +43,7 @@ public class AGEngine
 	private static ShaderManager shaderManager;
 	private static ViewManager viewManager;
 	private static AnimationManager animationManager;
+	private static FontManager fontManager;
 
 	private Context context;
 	private boolean initialised;
@@ -56,6 +58,7 @@ public class AGEngine
 		shaderManager = new ShaderManager();
 		viewManager = new ViewManager();
 		animationManager = new AnimationManager();
+		fontManager = new FontManager();
 	}
 
 	public void onGLSurfaceCreated()
@@ -126,6 +129,11 @@ public class AGEngine
 		if (eventListener != null) {
 			eventListener.onGraphicsEngineInitialised();
 		}
+	}
+
+	public void createFont(String fontName, int fontSize)
+	{
+
 	}
 
 	public void destroy()

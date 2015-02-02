@@ -35,18 +35,27 @@ public class TextureManager
 	{
 		Log.d(LogTags.OPEN_GL, "TextureManager.destroy()");
 
+		deleteTextures();
+
 		textureInfosById.clear();
 		texturesById.clear();
 
 		initialised = false;
 	}
 
-	public TextureInfo addTexture(TextureBitmapProvider textureBitmapProvider)
+	public UUID addTexture(TextureBitmapProvider textureBitmapProvider)
 	{
 		Log.d(LogTags.OPEN_GL, "TextureManager.addTexture()");
 
 		int widthPx = textureBitmapProvider.getTextureWidth();
 		int heightPx = textureBitmapProvider.getTextureHeight();
+
+		TextureInfo textureInfo = new TextureInfo();
+		textureInfo.setWidthPx(widthPx);
+		textureInfo.setHeightPx(heightPx);
+		textureInfo.setTextureAtlasDimensionsPx(widthPx, heightPx);
+		textureInfo.setxPx(0);
+		textureInfo.setyPx(0);
 
 		Texture texture = new Texture(widthPx, heightPx);
 		texture.setTextureBitmapProvider(textureBitmapProvider);
@@ -54,17 +63,7 @@ public class TextureManager
 
 		texturesById.put(texture.getId(), texture);
 
-		TextureInfo textureInfo = new TextureInfo();
-
-		textureInfo.setWidthPx(widthPx);
-		textureInfo.setHeightPx(heightPx);
-		textureInfo.setTextureId(texture.getId());
-		textureInfo.setId(UUID.randomUUID());
-		textureInfo.setTextureAtlasDimensionsPx(widthPx, heightPx);
-		textureInfo.setxPx(0);
-		textureInfo.setyPx(0);
-
-		return textureInfo;
+		return texture.getId();
 	}
 
 	public TextureInfo getTextureInfo(UUID textureId)
@@ -95,9 +94,9 @@ public class TextureManager
 		return textureInfosById.get(id) != null;
 	}
 
-	public void bindTextureForDrawing(TextureInfo textureInfo)
+	public void bindTextureForDrawing(UUID textureID)
 	{
-		Texture texture = texturesById.get(textureInfo.getTextureId());
+		Texture texture = texturesById.get(textureID);
 
 		if (texture != null)
 		{
@@ -105,7 +104,7 @@ public class TextureManager
 		}
 		else
 		{
-			Log.e("TextureManager.bindTextureForDrawing", "Texture not found");
+			Log.e("TextureManager.bindTextureForDrawing", "Texture not found. textureId = " + textureID);
 		}
 	}
 }

@@ -8,8 +8,6 @@ import java.util.UUID;
 public class TextureInfo
 {
 	private UUID id;
-	//which texture atlas this belongs to
-	private UUID textureId;
 
 	//this texture could be a portion of a larger texture
 	private int totalTextureWidthPx;
@@ -26,24 +24,14 @@ public class TextureInfo
 	private float [] glTextureOffset = new float[] {0, 0};
 	private float [] glTextureScale = new float[] {1.0f, 1.0f };
 
+	public TextureInfo()
+	{
+		id = UUID.randomUUID();
+	}
+
 	public UUID getId()
 	{
 		return id;
-	}
-
-	public void setId(UUID id)
-	{
-		this.id = id;
-	}
-
-	public UUID getTextureId()
-	{
-		return textureId;
-	}
-
-	public void setTextureId(UUID textureId)
-	{
-		this.textureId = textureId;
 	}
 
 	public void setTextureAtlasDimensionsPx(int textureAtlasWidthPx, int textureAtlasHeightPx)
@@ -133,4 +121,23 @@ public class TextureInfo
 			glTextureScale[1] = (float) heightPx / (float) totalTextureHeightPx;
 		}
 	}
+
+	@Override
+	public String toString()
+	{
+		String result = "TextureInfo - ";
+
+		result += " Id = " + id;
+		result += " totalTextureWidthPx = " + totalTextureWidthPx;
+		result += " totalTextureHeightPx = " + totalTextureHeightPx;
+		result += " xPx = " + xPx;
+		result += " yPx = " + yPx;
+		result += " widthPx = " + widthPx;
+		result += " heightPx = " + heightPx;
+		result += " Scale  =  [" + getGlTextureScale()[0] + ", " + getGlTextureScale()[1] + "]";
+		result += " Offset  =  [" + getGlTextureOffset()[0] + ", " + getGlTextureOffset()[1] + "]";
+
+		return result;
+	}
+
 }
