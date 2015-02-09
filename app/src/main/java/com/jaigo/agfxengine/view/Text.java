@@ -85,7 +85,7 @@ public class Text extends View
 		for (int i = 0; i < text.length(); i++)
 		{
 			Character character = new Character(text.charAt(i), font);
-			character.moveBy(totalWidth , 0);
+			character.moveBy(totalWidth + character.getWidth() / 2.0f, 0);
 			totalWidth += character.getWidth();
 			addChild(character);
 		}
