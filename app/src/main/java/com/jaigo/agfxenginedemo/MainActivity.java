@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements AGEngineEventListener
 	{
 		AGEngine.FontManager().createFont(defaultTypeface, 120);
 
-		//createScene();
+		createScene();
 
 		createDebugScene();
 	}
@@ -67,20 +67,17 @@ public class MainActivity extends Activity implements AGEngineEventListener
 	{
 		scene = new BaseView(1.0f, 1.0f);
 
-		Text text = new Text(1.0f, 0.2f);
+		Text text = new Text(0.55f, 0.08f);
 		text.setText("Hello World");
 		text.setColor(new Color(Color.RED));
 		text.setTextColor(new Color(Color.WHITE));
 		//text.setCenter(0.0f, -0.2f);
 		scene.addChild(text);
 
-		Scroller scroller = new Scroller(0.1f, 0.1f);
+		Scroller scroller = new Scroller(0.2f, 0.2f);
 		scroller.setColor(new Color(Color.BLUE));
-		//scene.addChild(scroller);
-
-		TexturedView fontImage = new TexturedView(1.0f, 1.0f);
-		fontImage.setTextureId(AGEngine.FontManager().getDefaultFont().getTextureId());
-		//scene.addChild(fontImage);
+		scroller.setCenter(0.0f, 0.2f);
+		scene.addChild(scroller);
 
 		AGEngine.ViewManager().addView(scene);
 	}
