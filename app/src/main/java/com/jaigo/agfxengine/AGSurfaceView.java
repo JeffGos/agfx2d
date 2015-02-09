@@ -61,7 +61,7 @@ public class AGSurfaceView extends GLSurfaceView
 		float glTouchPercentX = convertViewPixelsToPercentX((int) event.getX());
 		float glTouchPercentY = convertViewPixelsToPercentY((int) event.getY());
 
-		AGEngine.ViewManager().onViewSurfaceTouched(glTouchPercentX, glTouchPercentY, event.getActionMasked());
+		AGEngine.ViewManager().onViewSurfaceTouched(glTouchPercentX, glTouchPercentY, event);
 
 		return true;
 	}

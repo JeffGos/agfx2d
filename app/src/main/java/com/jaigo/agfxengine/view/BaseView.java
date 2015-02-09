@@ -3,6 +3,8 @@ package com.jaigo.agfxengine.view;
 //
 // Created by Jeff Gosling on 08/01/2015
 
+import android.view.MotionEvent;
+
 import com.jaigo.agfxengine.view.listeners.OnClickListener;
 import com.jaigo.agfxengine.view.listeners.OnDragListener;
 import com.jaigo.agfxengine.view.listeners.OnReleaseListener;
@@ -40,6 +42,9 @@ public class BaseView
 	protected OnDragListener onDragListener;
 	protected OnTouchListener onTouchListener;
 	protected OnReleaseListener onReleaseListener;
+
+	public BaseView()
+	{}
 
 	public BaseView(float widthPercent, float heightPercent)
 	{
@@ -162,7 +167,7 @@ public class BaseView
 		this.isDraggable = isDraggable;
 	}
 
-	public final boolean onTouched(float touchPercentX, float touchPercentY)
+	public final boolean onTouched(float touchPercentX, float touchPercentY, MotionEvent event)
 	{
 		startTouchPercentX = lastTouchedPercentX = touchPercentX;
 		startTouchPercentY = lastTouchedPercentY = touchPercentY;
@@ -176,14 +181,14 @@ public class BaseView
 			handled |= onTouchListener.onTouched(this);
 		}
 
-		handled |= onTouched();
+		handled |= onTouched(event);
 
 		return handled;
 	}
 
-	protected boolean onTouched() { return false; }
+	protected boolean onTouched(MotionEvent event) { return false; }
 
-	public final boolean onDragged(float touchPercentX, float touchPercentY)
+	public final boolean onDragged(float touchPercentX, float touchPercentY, MotionEvent event)
 	{
 		if (!isTouched)
 		{
@@ -219,7 +224,7 @@ public class BaseView
 				moveBy(dragAmountX, dragAmountY);
 			}
 
-			handled |= onDragged();
+			handled |= onDragged(event);
 
 			lastTouchedPercentX = touchPercentX;
 			lastTouchedPercentY = touchPercentY;
@@ -228,9 +233,9 @@ public class BaseView
 		return handled;
 	}
 
-	protected boolean onDragged() { return false; }
+	protected boolean onDragged(MotionEvent event) { return false; }
 
-	public final boolean onReleased(float touchPercentX, float touchPercentY)
+	public final boolean onReleased(float touchPercentX, float touchPercentY, MotionEvent event)
 	{
 		isTouched = false;
 		isDragged = false;
@@ -242,14 +247,14 @@ public class BaseView
 			handled |= onReleaseListener.onRelease(this);
 		}
 
-		handled |= onReleased();
+		handled |= onReleased(event);
 
 		return handled;
 	}
 
-	protected boolean onReleased() { return false; }
+	protected boolean onReleased(MotionEvent event) { return false; }
 
-	public final boolean onClicked(float touchPercentX, float touchPercentY)
+	public final boolean onClicked(float touchPercentX, float touchPercentY, MotionEvent event)
 	{
 		boolean handled = false;
 
@@ -258,8 +263,12 @@ public class BaseView
 			handled |= onClickListener.onClick(this);
 		}
 
+		handled |= onClicked(event);
+
 		return handled;
 	}
+
+	protected boolean onClicked(MotionEvent event) { return false; }
 
 	public BaseView setOnClickListener(OnClickListener listener)
 	{

@@ -21,14 +21,14 @@ public class MainActivity extends Activity implements AGEngineEventListener
 {
 	AGSurfaceView agSurfaceView;
 	BaseView scene;
-	Typeface defaultFont;
+	Typeface defaultTypeface;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
-		defaultFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Condensed.ttf");
+		defaultTypeface = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Roboto-Condensed.ttf");
 
 		agSurfaceView = new AGSurfaceView(this, null);
 		setContentView(agSurfaceView);
@@ -56,9 +56,9 @@ public class MainActivity extends Activity implements AGEngineEventListener
 	@Override
 	public void onGraphicsEngineInitialised()
 	{
-		AGEngine.FontManager().createFont(defaultFont, 32);
+		AGEngine.FontManager().createFont(defaultTypeface, 120);
 
-		createScene();
+		//createScene();
 
 		createDebugScene();
 	}
@@ -67,15 +67,20 @@ public class MainActivity extends Activity implements AGEngineEventListener
 	{
 		scene = new BaseView(1.0f, 1.0f);
 
-		Text text = new Text(0.5f, 0.1f);
+		Text text = new Text(1.0f, 0.2f);
 		text.setText("Hello World");
 		text.setColor(new Color(Color.RED));
 		text.setTextColor(new Color(Color.WHITE));
+		//text.setCenter(0.0f, -0.2f);
 		scene.addChild(text);
 
-		//View v = new View(0.5f, 0.5f);
-		//v.setColor(new Color(Color.BLUE));
-		//scene.addChild(v);
+		Scroller scroller = new Scroller(0.1f, 0.1f);
+		scroller.setColor(new Color(Color.BLUE));
+		//scene.addChild(scroller);
+
+		TexturedView fontImage = new TexturedView(1.0f, 1.0f);
+		fontImage.setTextureId(AGEngine.FontManager().getDefaultFont().getTextureId());
+		//scene.addChild(fontImage);
 
 		AGEngine.ViewManager().addView(scene);
 	}

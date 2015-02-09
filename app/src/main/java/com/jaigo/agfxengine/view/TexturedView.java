@@ -17,6 +17,8 @@ public class TexturedView extends View implements TextureBitmapProvider
 	protected TextureInfo textureInfo = new TextureInfo();
 	protected UUID textureId;
 
+	public TexturedView() {}
+
 	public TexturedView(float widthPercent, float heightPercent)
 	{
 		super(widthPercent, heightPercent);

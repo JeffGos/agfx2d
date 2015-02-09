@@ -58,30 +58,32 @@ public class ViewManager
 		rootView.clearChildren();
 	}
 
-	public void onViewSurfaceTouched(float touchPercentX, float touchPercentY, int motionEventAction)
+	public void onViewSurfaceTouched(float touchPercentX, float touchPercentY, MotionEvent event)
 	{
+		int motionEventAction= event.getActionMasked();
+
 		if (motionEventAction == MotionEvent.ACTION_MOVE)
 		{
 			if (touchedView != null)
 			{
 				if (!touchedView.isValueWithinView(touchPercentX, touchPercentY))
 				{
-					touchedView.onReleased(touchPercentX, touchPercentY);
+					touchedView.onReleased(touchPercentX, touchPercentY, event);
 					touchedView = null;
 				}
 				else
 				{
-					touchedView.onDragged(touchPercentX, touchPercentY);
+					touchedView.onDragged(touchPercentX, touchPercentY, event);
 				}
 			}
 		}
 		else if (motionEventAction == (MotionEvent.ACTION_DOWN) || motionEventAction == (MotionEvent.ACTION_UP))
 		{
-			handleTouchEvent(rootView, touchPercentX, touchPercentY, motionEventAction);
+			handleTouchEvent(rootView, touchPercentX, touchPercentY, event);
 		}
 	}
 
-	private boolean handleTouchEvent(BaseView viewToCheck, float touchPercentX, float touchPercentY, int motionEventAction)
+	private boolean handleTouchEvent(BaseView viewToCheck, float touchPercentX, float touchPercentY, MotionEvent event)
 	{
 		if (viewToCheck == null || !viewToCheck.isEnabled() || !viewToCheck.isVisible())
 		{
@@ -90,13 +92,15 @@ public class ViewManager
 
 		boolean handledByChild = false;
 
+		int motionEventAction= event.getActionMasked();
+
 		for (int i = viewToCheck.getChildren().size() - 1; i >= 0; i--)
 		{
 			BaseView child = viewToCheck.getChild(i);
 
 			if (child.isValueWithinView(touchPercentX, touchPercentY))
 			{
-				return handleTouchEvent(child, touchPercentX, touchPercentY, motionEventAction);
+				return handleTouchEvent(child, touchPercentX, touchPercentY, event);
 			}
 		}
 
@@ -107,7 +111,7 @@ public class ViewManager
 			{
 				touchedView = viewToCheck;
 
-				return viewToCheck.onTouched(touchPercentX, touchPercentY);
+				return viewToCheck.onTouched(touchPercentX, touchPercentY, event);
 			}
 			else if (motionEventAction == (MotionEvent.ACTION_UP))
 			{
@@ -115,14 +119,14 @@ public class ViewManager
 				{
 					if (touchedView == viewToCheck)
 					{
-						handledByChild |= touchedView.onClicked(touchPercentX, touchPercentY);
+						handledByChild |= touchedView.onClicked(touchPercentX, touchPercentY, event);
 					}
 
-					handledByChild |= touchedView.onReleased(touchPercentX, touchPercentY);
+					handledByChild |= touchedView.onReleased(touchPercentX, touchPercentY, event);
 					touchedView = null;
 				}
 
-				handledByChild |= viewToCheck.onReleased(touchPercentX, touchPercentY);
+				handledByChild |= viewToCheck.onReleased(touchPercentX, touchPercentY, event);
 			}
 		}
 

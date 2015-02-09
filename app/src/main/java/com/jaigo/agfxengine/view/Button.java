@@ -3,6 +3,8 @@ package com.jaigo.agfxengine.view;
 //
 // Created by Jeff Gosling on 10/01/2015
 
+import android.view.MotionEvent;
+
 import com.jaigo.agfxengine.animation.TimedAnimation;
 import com.jaigo.agfxengine.common.Color;
 
@@ -63,7 +65,7 @@ public class Button extends View
 	}
 
 	@Override
-	protected boolean onTouched()
+	protected boolean onTouched(MotionEvent event)
 	{
 		colorAnimation.stop();
 		color.copy(touchColor);
@@ -72,7 +74,7 @@ public class Button extends View
 	}
 
 	@Override
-	protected boolean onReleased()
+	protected boolean onReleased(MotionEvent event)
 	{
 		colorAnimation.start();
 		return false;

@@ -46,6 +46,31 @@ public class Text extends View
 		}
 	}
 
+	@Override
+	public BaseView setCenter(float xPercent, float yPercent)
+	{
+		float diffX = getCenterX() - xPercent;
+		float diffY = getCenterY() - yPercent;
+
+		for (BaseView view : getChildren())
+		{
+			view.moveBy(diffX, diffY);
+		}
+
+		return super.setCenter(xPercent, yPercent);
+	}
+
+	@Override
+	public BaseView moveBy(float movePercentX, float movePercentY)
+	{
+		for (BaseView view : getChildren())
+		{
+			view.moveBy( movePercentX, movePercentY);
+		}
+
+		return super.moveBy(movePercentX, movePercentY);
+	}
+
 	private void initialiseCharacters()
 	{
 		if (font == null || text == null)
@@ -53,61 +78,45 @@ public class Text extends View
 			return;
 		}
 
-		ArrayList<TextureInfo> textureInfos = font.getTextureInfosForString(text);
-
 		clearChildren();
 
 		float totalWidth = 0;
-		for (TextureInfo textureInfo : textureInfos)
+
+		for (int i = 0; i < text.length(); i++)
 		{
-			Character character = new Character(getHeight(), font);
-			character.moveBy(totalWidth * 3 , 0);
-			character.setTextureInfo(textureInfo);
-			totalWidth += (float)textureInfo.getWidthPx() / (float)AGEngine.CoordinateSystem().getViewWidthPx();
+			Character character = new Character(text.charAt(i), font);
+			character.moveBy(totalWidth , 0);
+			totalWidth += character.getWidth();
 			addChild(character);
 		}
 
 		for (BaseView view : getChildren())
 		{
-			view.moveBy(- totalWidth * 3 / 2.0f, 0);
+			view.moveBy( - totalWidth / 2.0f, 0);
 		}
 	}
 
 	private class Character extends TexturedView
 	{
+		protected char character;
 		protected Font font;
-		protected float aspectRatio = 1.0f; //width relative to height
 
-		public Character(float heightPercent, Font font)
+		public Character(char character, Font font)
 		{
-			super(0.1f, heightPercent);
-
-			setFont(font);
-		}
-
-		public void setFont(Font font)
-		{
+			this.character = character;
 			this.font = font;
 
-			setAspectRatio(textureInfo.getWidthPx() / font.getWidestCharacterWidth());
 			setTextureId(font.getTextureId());
-		}
+			setTextureInfo(font.getTextureInfosForCharacter(character));
 
-		@Override
-		public BaseView setWidth(float widthPercent)
-		{
-			if (aspectRatio > 0.0f && aspectRatio <= 1.0f)
-			{
-				widthPercent *= aspectRatio;
-			}
+			float widestCharacter = font.getWidestCharacterWidth();
+			float characterHeight = font.getFontSize();
+			float characterWidth = textureInfo.getWidthPx();
 
-			return super.setWidth(widthPercent);
-		}
-
-		private void setAspectRatio(float aspectRatio)
-		{
-			this.aspectRatio = aspectRatio;
-			setWidth(getWidth() * aspectRatio);
+			setWidth(characterWidth / AGEngine.CoordinateSystem().getViewWidthPx());
+			setHeight(characterHeight / AGEngine.CoordinateSystem().getViewHeightPx());
+			//scaleBy(3.0f, 3.0f);
+			initialise();
 		}
 	}
 }

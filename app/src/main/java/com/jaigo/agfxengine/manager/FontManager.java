@@ -13,8 +13,8 @@ import java.util.UUID;
 
 public class FontManager
 {
-	public static final int FONT_TEXTURE_WIDTH = 250;
-	public static final int FONT_TEXTURE_HEIGHT = 250;
+	public static final int FONT_TEXTURE_WIDTH = 1000;
+	public static final int FONT_TEXTURE_HEIGHT = 1000;
 
 	private Font defaultFont;
 	private UUID textureId;

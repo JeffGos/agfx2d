@@ -30,6 +30,10 @@ public class View extends BaseView
 		initialise();
 	}
 
+	public View()
+	{
+	}
+
 	public void initialise()
 	{
 		resetRotation();

@@ -59,6 +59,13 @@ public class Font implements TextureBitmapProvider
 		this.fontSize = fontSize;
 	}
 
+	public TextureInfo getTextureInfosForCharacter(char character)
+	{
+		Character characterObject = new Character(character);
+
+		return textureInfosByCharacterValue.get(characterObject);
+	}
+
 	public ArrayList<TextureInfo> getTextureInfosForString(String value)
 	{
 		ArrayList<TextureInfo> result = new ArrayList<>();
@@ -129,6 +136,27 @@ public class Font implements TextureBitmapProvider
 			{
 				totalHeight += heightPx;
 				totalWidth = 0;
+			}
+
+			boolean printBoundingBox = false;
+
+			if (printBoundingBox)
+			{
+				Paint paint2 = new Paint();
+				paint2.setAntiAlias(true);
+				paint2.setStrokeWidth(6f);
+				paint2.setStyle(Paint.Style.STROKE);
+				paint2.setStrokeJoin(Paint.Join.ROUND);
+
+				float left = totalWidth;
+				float top = totalHeight - fontSize;
+				float right = left + width;
+				float bottom = top + heightPx;
+
+				canvas.drawLine(left, top, right, top, paint2);
+				canvas.drawLine(left, top, left, bottom, paint2);
+				canvas.drawLine(left, bottom, right, bottom, paint2);
+				canvas.drawLine(right, bottom, right, top, paint2);
 			}
 
 			canvas.drawText(character.toString(), totalWidth, totalHeight, paint);
