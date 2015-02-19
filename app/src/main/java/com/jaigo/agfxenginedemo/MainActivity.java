@@ -68,7 +68,7 @@ public class MainActivity extends Activity implements AGEngineEventListener
 		scene = new BaseView(1.0f, 1.0f);
 
 		Text text = new Text(0.55f, 0.08f);
-		text.setText("Hello World");
+		text.setText("Hello Fiona");
 		text.setColor(new Color(Color.RED));
 		text.setTextColor(new Color(Color.WHITE));
 		//text.setCenter(0.0f, -0.2f);
