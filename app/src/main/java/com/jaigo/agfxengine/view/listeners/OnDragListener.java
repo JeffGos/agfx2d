@@ -7,5 +7,5 @@ import com.jaigo.agfxengine.view.BaseView;
 
 public interface OnDragListener
 {
-	public boolean onDrag(BaseView view, float dragAmountX, float dragAmountY);
+	public boolean onDrag(BaseView view, float dragPercentX, float dragPercentY);
 }
