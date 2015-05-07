@@ -16,6 +16,7 @@ public class Color
 	public static final float [] BLUE = new float [] { 0, 0, 1, 1};
 	public static final float [] WHITE = new float [] { 1, 1, 1, 1};
 	public static final float [] BLACK = new float [] { 0, 0, 0, 1};
+	public static final float [] TRANSPARENT = new float [] { 0, 0, 0, 0};
 
 	private float [] rgba;
 
@@ -28,7 +29,6 @@ public class Color
 	{
 		this.rgba = new float [4];
 		System.arraycopy(rgba, 0, this.rgba, 0, 4);
-		this.rgba = rgba;
 	}
 
 	public void set(float red, float green, float blue)
@@ -52,9 +52,6 @@ public class Color
 	{
 		float [] copyArray = copy.getArray();
 
-		rgba[R] = copyArray[R];
-		rgba[G] = copyArray[G];
-		rgba[B] = copyArray[B];
-		rgba[A] = copyArray[A];
+		System.arraycopy(copyArray, 0, this.rgba, 0, 4);
 	}
 }
