@@ -181,6 +181,7 @@ public class BaseView
 			handled |= onTouchListener.onTouched(this);
 		}
 
+		handled |= isDraggable();
 		handled |= onTouched(event);
 
 		return handled;
@@ -211,17 +212,17 @@ public class BaseView
 
 		if (isDragged)
 		{
-			float dragAmountX = touchPercentX - lastTouchedPercentX;
-			float dragAmountY = touchPercentY - lastTouchedPercentY;
+			float dragPercentX = touchPercentX - lastTouchedPercentX;
+			float dragPercentY = touchPercentY - lastTouchedPercentY;
 
 			if (onDragListener != null)
 			{
-				handled |= onDragListener.onDrag(this, dragAmountX, dragAmountY);
+				handled |= onDragListener.onDrag(this, dragPercentX, dragPercentY);
 			}
 
-			if (isDraggable)
+			if (isDraggable())
 			{
-				moveBy(dragAmountX, dragAmountY);
+				moveBy(dragPercentX, dragPercentY);
 			}
 
 			handled |= onDragged(event);
@@ -233,7 +234,7 @@ public class BaseView
 		return handled;
 	}
 
-	protected boolean onDragged(MotionEvent event) { return false; }
+	protected boolean onDragged(MotionEvent event) { return isDraggable(); }
 
 	public final boolean onReleased(float touchPercentX, float touchPercentY, MotionEvent event)
 	{
