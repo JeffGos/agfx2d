@@ -16,6 +16,7 @@ import com.jaigo.agfxengine.AGSurfaceView;
 import com.jaigo.agfxengine.animation.Animation;
 import com.jaigo.agfxengine.common.Color;
 import com.jaigo.agfxengine.view.*;
+import com.jaigo.agfxengine.view.listeners.OnDragListener;
 
 public class MainActivity extends Activity implements AGEngineEventListener
 {
@@ -60,11 +61,14 @@ public class MainActivity extends Activity implements AGEngineEventListener
 
 		createScene();
 
-		createDebugScene();
+		//createDebugScene();
 	}
 
 	private void createDebugScene()
 	{
+		float width = 0.1f;
+		float widthAsHeight = AGEngine.CoordinateSystem().widthPercentRelativeToHeight(width);
+
 		scene = new BaseView(1.0f, 1.0f);
 
 		Text text = new Text(0.55f, 0.08f);
@@ -74,20 +78,6 @@ public class MainActivity extends Activity implements AGEngineEventListener
 		//text.setCenter(0.0f, -0.2f);
 		scene.addChild(text);
 
-		Scroller scroller = new Scroller(0.2f, 0.2f);
-		scroller.setColor(new Color(Color.BLUE));
-		scroller.setCenter(0.0f, 0.2f);
-		scene.addChild(scroller);
-
-		AGEngine.ViewManager().addView(scene);
-	}
-
-	private void createScene()
-	{
-		float width = 0.1f;
-		float widthAsHeight = AGEngine.CoordinateSystem().widthPercentRelativeToHeight(width);
-
-		scene = new BaseView(1.0f, 1.0f);
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.opengleslogo);
 		final Image image = new Image(0.6f, 0.6f, bitmap);
 		image.setCenter(0.5f, 0.9f);
@@ -104,11 +94,10 @@ public class MainActivity extends Activity implements AGEngineEventListener
 		image2.setCenter(0.5f, 0.1f);
 		scene.addChild(image2);
 
-		Button btn = new Button(0.4f, 0.1f);
-		btn.setCenter(0.5f, 0.25f);
-		btn.setColor(new Color(Color.RED));
-		btn.setTouchColor(new Color(Color.BLACK));
-		scene.addChild(btn);
+		Scroller scroller = new Scroller(0.2f, 0.2f);
+		scroller.setColor(new Color(Color.BLUE));
+		scroller.setCenter(0.0f, 0.2f);
+		//scene.addChild(scroller);
 
 		Animation spinRepeat = new Animation()
 		{
@@ -132,6 +121,33 @@ public class MainActivity extends Activity implements AGEngineEventListener
 		};
 
 		spinRepeat.start();
+
+		AGEngine.ViewManager().addView(scene);
+	}
+
+	private void createScene()
+	{
+		scene = new BaseView(1.0f, 1.0f);
+
+		Text text = new Text(0.55f, 0.08f);
+		text.setText("Hello World");
+		text.setColor(new Color(Color.RED));
+		text.setTextColor(new Color(Color.WHITE));
+		//text.setCenter(0.0f, -0.2f);
+		scene.addChild(text);
+
+		Button btn = new Button(0.4f, 0.1f);
+		btn.setCenter(0.5f, 0.25f);
+		btn.setColor(new Color(Color.RED));
+		btn.setTouchColor(new Color(Color.BLACK));
+		btn.setText("Button");
+		scene.addChild(btn);
+
+		View square = new View(0.2f, 0.1f);
+		square.setCenter(0.5f, 0.75f);
+		square.setColor(new Color(Color.RED));
+		square.setDraggable(true);
+		scene.addChild(square);
 
 		AGEngine.ViewManager().addView(scene);
 	}

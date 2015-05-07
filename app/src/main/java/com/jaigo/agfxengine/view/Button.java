@@ -3,15 +3,18 @@ package com.jaigo.agfxengine.view;
 //
 // Created by Jeff Gosling on 10/01/2015
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.jaigo.agfxengine.animation.TimedAnimation;
 import com.jaigo.agfxengine.common.Color;
+import com.jaigo.agfxengine.common.LogTags;
 
 public class Button extends View
 {
 	private static int FADE_COLOR_TIMEOUT_MS = 150;
 
+	private Text text;
 	private Color originalColor = new Color();
 	private Color touchColor;
 	private TimedAnimation colorAnimation = new TimedAnimation(FADE_COLOR_TIMEOUT_MS)
@@ -64,11 +67,25 @@ public class Button extends View
 		return super.setColor(color);
 	}
 
+	public void setText(String value)
+	{
+		if (text == null) {
+			text = new Text(getWidth(), getHeight());
+			text.setColor(new Color(Color.TRANSPARENT));
+			text.setTextColor(new Color(Color.WHITE));
+			addChild(text);
+		}
+
+		text.setText(value);
+	}
+
 	@Override
 	protected boolean onTouched(MotionEvent event)
 	{
 		colorAnimation.stop();
 		color.copy(touchColor);
+
+		Log.d(LogTags.DEBUG, "onTouched");
 
 		return false;
 	}
@@ -77,6 +94,9 @@ public class Button extends View
 	protected boolean onReleased(MotionEvent event)
 	{
 		colorAnimation.start();
+
+		Log.d(LogTags.DEBUG, "onReleased");
+
 		return false;
 	}
 }
